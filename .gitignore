@@ -1,160 +1,127 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+import turtle
+import os
+scrn = turtle.Screen()
+scrn.title("Pong by @Sreejitha")
+scrn.bgcolor("black")
+scrn.setup(width=900,height=780)
+scrn.tracer(0)
 
-# C extensions
-*.so
+#score
+score_a = 0
+score_b = 0
 
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+#paddle A
+paddle_a = turtle.Turtle()
+paddle_a.speed(0)
+paddle_a.shape("square")
+paddle_a.color("white")
+paddle_a.shapesize(stretch_wid=5,stretch_len=1)
+paddle_a.penup()
+paddle_a.goto(-380,0)
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
+#padle b
+paddle_b = turtle.Turtle()
+paddle_b.speed(0)
+paddle_b.shape("square")
+paddle_b.color("white")
+paddle_b.shapesize(stretch_wid=5,stretch_len=1)
+paddle_b.penup()
+paddle_b.goto(370,0)
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
 
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
-cover/
+#a up function
+def a_up():
+    y = paddle_a.ycor()
+    y += 30
+    paddle_a.sety(y)
 
-# Translations
-*.mo
-*.pot
+#a down
+def a_down():
+    y = paddle_a.ycor()
+    y -= 30
+    paddle_a.sety(y)
 
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
+#b up function
+def b_up():
+    y = paddle_b.ycor()
+    y += 30
+    paddle_b.sety(y)
+#b down function
+def b_down():
+    y = paddle_b.ycor()
+    y -= 20
+    paddle_b.sety(y)
 
-# Flask stuff:
-instance/
-.webassets-cache
+#ball
+ball = turtle.Turtle()
+ball.speed(0)
+ball.shape("square")
+ball.color("white")
+ball.penup()
+ball.goto(0,0)
+ball.dx = 3
+ball.dy = 3
 
-# Scrapy stuff:
-.scrapy
+#pen
+pen = turtle.Turtle()
+pen.speed(0)
+pen.color("white")
+pen.penup()
+pen.hideturtle()
+pen.goto(0,320)
+pen.write("Player A: 0  Player B:  0",align="center",font=("Courier",24,"normal"))
+#keybpard binding
+scrn.listen()
+scrn.onkeypress(a_up,"w")
+scrn.onkeypress(a_down,"s")
+scrn.onkeypress(b_up,"Up")
+scrn.onkeypress(b_down,"Down")
 
-# Sphinx documentation
-docs/_build/
 
-# PyBuilder
-.pybuilder/
-target/
 
-# Jupyter Notebook
-.ipynb_checkpoints
 
-# IPython
-profile_default/
-ipython_config.py
+#main loop
+while True:
+    scrn.update()
 
-# pyenv
-#   For a library or package, you might want to ignore these files since the code is
-#   intended to run in multiple environments; otherwise, check them in:
-# .python-version
+    #ball moment
+    ball.setx(ball.xcor() + ball.dx)
+    ball.sety(ball.ycor() + ball.dy)
 
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-#Pipfile.lock
+    #top border bounce
+    if ball.ycor() > 380:
+        ball.sety(380)
+        ball.dy *= -1
+        os.system("afplay bounce-8111.mp3&")
 
-# poetry
-#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
-#poetry.lock
-
-# pdm
-#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
-#pdm.lock
-#   pdm stores project-wide configurations in .pdm.toml, but it is recommended to not include it
-#   in version control.
-#   https://pdm.fming.dev/#use-with-ide
-.pdm.toml
-
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
-__pypackages__/
-
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# Spyder project settings
-.spyderproject
-.spyproject
-
-# Rope project settings
-.ropeproject
-
-# mkdocs documentation
-/site
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-.pyre/
-
-# pytype static type analyzer
-.pytype/
-
-# Cython debug symbols
-cython_debug/
-
-# PyCharm
-#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
-#  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
-#  and can be added to the global gitignore or merged into this file.  For a more nuclear
-#  option (not recommended) you can uncomment the following to ignore the entire idea folder.
-#.idea/
+    #bottom border bounce
+    if ball.ycor() < -380:
+        ball.sety(-380)
+        ball.dy *= -1
+        os.system("afplay bounce-8111.mp3&")
+    #right border bounce
+    if ball.xcor() > 440:
+        ball.goto(0,0)
+        ball.dx *= -1
+        score_a += 1
+        os.system("afplay whoosh-6316.mp3&")
+        pen.clear()
+        pen.write("Player A: {}  Player B:  {}".format(score_a,score_b),align="center",font=("Courier",24,"normal"))
+    #left border bounce
+    if ball.xcor() < -440:
+        ball.goto(0,0)
+        ball.dx *= -1
+        score_b += 1
+        os.system("afplay whoosh-6316.mp3&")
+        pen.clear()
+        pen.write("Player A: {}  Player B:  {}".format(score_a,score_b),align="center",font=("Courier",24,"normal"))
+    #paddle b bounces
+    if (ball.xcor() > 360 and ball.xcor()< 370)and (ball.ycor() < paddle_b.ycor() + 40 and ball.ycor()>paddle_b.ycor()-40):
+        ball.setx(360)
+        ball.dx *= -1
+        os.system("afplay bounce-8111.mp3&")
+    #paddle a bounce
+    if (ball.xcor() > -370 and ball.xcor()< -360)and (ball.ycor() < paddle_a.ycor() + 40 and ball.ycor()>paddle_a.ycor()-40):
+        ball.setx(-360)
+        ball.dx *= -1
+        os.system("afplay bounce-8111.mp3&")
